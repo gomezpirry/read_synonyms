@@ -7,6 +7,7 @@ import os
 
 def write_csv(csv_file, output_text):
     # write csv file
+    print(csv_file)
     file_form = open(csv_file, 'w')
     for key, value in output_text.items():
         file_form.write(str(key) + ';' + str(value['name']) + ';')
@@ -18,8 +19,8 @@ def write_csv(csv_file, output_text):
     filename_w = os.path.basename(csv_file)
     filename, file_extension = os.path.splitext(filename_w)
 
-    four_file = filename + str(-4) + file_extension
-
+    four_file = csv_file.split('.')[0] + str(-4) + file_extension
+    print(four_file)
     # write node with 4 or more synonyms
     file_form = open(four_file, 'w')
     for key, value in output_text.items():
@@ -62,12 +63,6 @@ def main(argv):
     # end if
 
     if len(argv) == 4:
-        # verify if output file exist
-        if not os.path.isfile(argv[3]):
-            print('Output File does not exist')
-            sys.exit()
-        # end if
-
         # verify if inout file is a csv
         if not file_extension_output == '.csv':
             print('Input File must have a .obo extension')
@@ -93,8 +88,8 @@ def main(argv):
             output = arg
     # end for
 
-    print(url, output)
     graph = obonet.read_obo(url)
+    print(len(graph))
 
     # get all nodes of graph
     nodes = graph.nodes(data=True)
@@ -162,10 +157,10 @@ def main(argv):
                 # add node to dictionary if node is not in result
                 result[clean_node['id']] = {'name': clean_node['name'], 'synonyms': same_synonyms}
     # end for
-    if output != '':
-        write_csv(output, result)
-    else:
-        write_csv('output.csv', result)
+    for i in result:
+        print(i)
+        print(result[i])
+    write_csv(output, result)
 # end main
 
 
